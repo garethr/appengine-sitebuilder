@@ -1,0 +1,9 @@
+list
+
+{% if items %}
+    <ol>
+    {% for item in items %}
+        <li><a href="{{item.internal_url}}">{{item.title}}</a></li>
+    {% endfor %}
+    </ol>
+{% endif %}

@@ -1,0 +1,15 @@
+item
+
+<h1>{{item.title}}</h1>
+<a href="{{item.get_url}}">{{item.get_url}}</a>
+
+{% if item.tags %}
+<ul>
+{% for tag in item.tags %}
+    <li><a href="/tags/{{tag}}">{{tag}}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{{item.content}}
+

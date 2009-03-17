@@ -1,0 +1,9 @@
+tags
+
+{% if tags %}
+    <ul>
+    {% for tag in tags %}
+        <li>{{tag.name}} - {{tag.url}}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
