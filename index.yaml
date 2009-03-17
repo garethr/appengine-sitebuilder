@@ -17,9 +17,15 @@ indexes:
   - name: date
     direction: desc
 
-# Unused in query history -- copied from input.
+# Used once in query history.
 - kind: NewsItem
   properties:
   - name: tags
   - name: publish_date
     direction: desc
+
+# Used 4 times in query history.
+- kind: Tag
+  properties:
+  - name: name
+  - name: title

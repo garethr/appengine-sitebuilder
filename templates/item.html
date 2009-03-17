@@ -1,8 +1,23 @@
-item
+{% extends "base.html" %}
 
+{% block header %}
 <h1>{{item.title}}</h1>
-<a href="{{item.get_url}}">{{item.get_url}}</a>
+<a href="{{item.publish_date|date:"/Y/m/d/"}}">{{item.publish_date|date:"jS F Y"}}</a>
+{% endblock %}
 
+
+{% block content %}
+
+<h2>Related Content</h2>
+{% if related %}
+    <ul>
+    {% for item in related %}
+        <li><a href="{{item.url}}">{{item.title}}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+<h2>Tags</h2>
 {% if item.tags %}
 <ul>
 {% for tag in item.tags %}
@@ -13,3 +28,4 @@ item
 
 {{item.content}}
 
+{% endblock %}

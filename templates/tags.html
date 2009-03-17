@@ -1,9 +1,13 @@
-tags
+{% extends "base.html" %}
+
+{% block content %}
 
 {% if tags %}
     <ul>
     {% for tag in tags %}
-        <li>{{tag.name}} - {{tag.url}}</li>
+        <li><a href="/tags/{{tag.name}}/">{{tag.name}}</a> added to <a href="{{tag.url}}">{{tag.title}}</a> {{tag.date|timesince}} ago</li>
     {% endfor %}
     </ul>
 {% endif %}
+
+{% endblock %}

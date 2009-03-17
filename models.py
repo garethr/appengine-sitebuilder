@@ -22,6 +22,7 @@ class NewsItem(db.Model):
         for tag in self.tags:
             obj = Tag(
                 name=tag,
+                title=self.title,
                 url=self.internal_url,
             )
             obj.put()
@@ -37,4 +38,5 @@ class NewsItem(db.Model):
 class Tag(db.Model):
     name = db.StringProperty(required=True)
     url = db.StringProperty(required=True)
-    
+    title = db.StringProperty(required=True)
+    date = db.DateTimeProperty(auto_now_add=True)
