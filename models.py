@@ -1,12 +1,13 @@
 from google.appengine.ext import db
+from google.appengine.ext import search
 
 from lib import slugify
 
-class NewsItem(db.Model):
+class NewsItem(search.SearchableModel):
     "Represents an piece of content"
     title = db.StringProperty(required=True)
     slug = db.StringProperty()
-    content = db.StringProperty(required=True)
+    content = db.TextProperty(required=True)
     external_url = db.LinkProperty(required=True)
     internal_url = db.StringProperty()
     # we store the date automatically so we can filter the list
@@ -32,7 +33,8 @@ class NewsItem(db.Model):
     def delete(self):
         tags = Tag.all()
         tags.filter('url =', self.internal_url)
-        tags.delete()
+        for tag in tags:
+            tag.delete()
         super(NewsItem, self).delete()
         
 class Tag(db.Model):
@@ -40,3 +42,8 @@ class Tag(db.Model):
     url = db.StringProperty(required=True)
     title = db.StringProperty(required=True)
     date = db.DateTimeProperty(auto_now_add=True)
+    
+class Content(db.Model):
+    path = db.StringProperty(required=True)
+    ident = db.StringProperty(required=True)
+    value = db.TextProperty(required=True)

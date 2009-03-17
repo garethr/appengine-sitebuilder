@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if query %}
+        <p>We found {{items.count}} result{{items.count|pluralize}}.</p>
+    {% else %}
+        <p>You need to enter a search query.</p>
+    {% endif %}
+
+    {% include "_list.html" %}
+{% endblock %}

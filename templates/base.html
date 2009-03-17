@@ -2,7 +2,10 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{{title}}{% endblock %}</title>
+
+    <meta name="keywords" content="{{keywords}}"/>
+    <meta name="description" content="{{description}}"/>
 
     <link rel="stylesheet" href="/assets/css/reset.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/assets/css/main.css" type="text/css" media="screen" />
@@ -11,15 +14,36 @@
 
 <body>
     
+<div id="navigation">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/tags/">Tags</a></li>
+    </ul>
+</div>
+    
+<div id="search">
+    <form action="/search" method="get">
+        <div>
+            <label for="q">Search</label>
+            <input type="text" name="q" id="q" value="{{query}}"/>
+            <input type="submit" value="Search"/>
+        </div>
+    </form>
+</div>
+    
 <div id="header">
 {% block header %}
-
 {% endblock %}
 </div>
 
+{% if lead %}
+<div id="lead">
+{{lead}}
+</div>
+{% endif %}
+
 <div id="content">
 {% block content %}
-
 {% endblock %}
 </div>
 
