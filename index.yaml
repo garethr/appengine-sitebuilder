@@ -31,7 +31,21 @@ indexes:
   - name: publish_date
     direction: desc
 
-# Used 20 times in query history.
+# Unused in query history -- copied from input.
+- kind: Page
+  properties:
+  - name: __searchable_text_index
+  - name: publish_date
+    direction: desc
+
+# Unused in query history -- copied from input.
+- kind: Page
+  properties:
+  - name: tags
+  - name: publish_date
+    direction: desc
+
+# Unused in query history -- copied from input.
 - kind: Tag
   properties:
   - name: name

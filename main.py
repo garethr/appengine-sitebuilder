@@ -39,15 +39,16 @@ class Index(BaseRequest):
     def get(self):
 
         """
-        tags = ['tag1','tag4']
+        tags = ['tag 1','tag 4']
         item = Page(
-            title="title3",
+            title="title4",
             content="content and more",
             external_url="http://example.com",
             tags=tags,
         )
         item.put()
-
+        """
+        """
         item = Page(
             title="about",
             content="content",
@@ -55,8 +56,8 @@ class Index(BaseRequest):
             tags=tags,
         )
         item.put()
-
-
+        """
+        """
         content = Content(
             path="/",
             ident="title",
@@ -113,7 +114,7 @@ class TagList(BaseRequest):
     def get(self, tag):
         items = Page.all()
         items.order('-publish_date')
-        items.filter('tags = ', tag)
+        items.filter('tags = ', tag.replace("-", " "))
         context = {
             "items": items,
             "title": "Content tagged %s" % tag,

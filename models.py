@@ -39,7 +39,7 @@ class Tag(db.Model):
     url = db.StringProperty(required=True)
     title = db.StringProperty(required=True)
     date = db.DateTimeProperty(auto_now_add=True)
-    
+        
 class Content(db.Model):
     path = db.StringProperty(required=True)
     ident = db.StringProperty(required=True)

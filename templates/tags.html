@@ -5,7 +5,7 @@
 {% if tags %}
     <ul>
     {% for tag in tags %}
-        <li><a href="/tags/{{tag.name}}/">{{tag.name}}</a> added to <a href="{{tag.url}}">{{tag.title}}</a> {{tag.date|timesince}} ago</li>
+        <li><a href="/tags/{{tag.name|slugify}}/">{{tag.name}}</a> added to <a href="{{tag.url}}">{{tag.title}}</a> {{tag.date|timesince}} ago</li>
     {% endfor %}
     </ul>
 {% endif %}
