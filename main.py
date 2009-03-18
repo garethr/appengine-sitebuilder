@@ -8,7 +8,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
 
-from models import NewsItem, Tag, Content
+from models import Page, Tag, Content
 
 class BaseRequest(webapp.RequestHandler):
     def _extra_context(self, context):        
@@ -27,21 +27,36 @@ class BaseRequest(webapp.RequestHandler):
         context.update(extras)
         context.update(content_extras)
         return context
+        
+    def render(self, template_file, context={}):
+        path = os.path.join(os.path.dirname(__file__), 'templates',
+            template_file)
+        # render the template with the provided context
+        output = template.render(path, self._extra_context(context))
+        self.response.out.write(output)        
     
 class Index(BaseRequest):
     def get(self):
 
         """
         tags = ['tag1','tag4']
-        item = NewsItem(
+        item = Page(
             title="title3",
             content="content and more",
             external_url="http://example.com",
             tags=tags,
         )
         item.put()
-        """
-        """
+
+        item = Page(
+            title="about",
+            content="content",
+            internal_url="/about/",
+            tags=tags,
+        )
+        item.put()
+
+
         content = Content(
             path="/",
             ident="title",
@@ -50,17 +65,14 @@ class Index(BaseRequest):
         content.put()
         """
 
-        items = NewsItem.all().order('-publish_date').fetch(20)
+
+        items = Page.all().order('-publish_date').fetch(20)
         context = {
             "items": items,
             "title": "Home",
         }
         # calculate the template path
-        path = os.path.join(os.path.dirname(__file__), 'templates',
-            'index.html')
-        # render the template with the provided context
-        output = template.render(path, self._extra_context(context))
-        self.response.out.write(output)
+        self.render("index.html", context)
         
 class DateList(BaseRequest):
     def get(self, year, month=None, day=None):
@@ -86,7 +98,7 @@ class DateList(BaseRequest):
             upper_limit = lower_limit + timedelta(1)
             title = "%s %s %s" % (lower_limit.strftime("%d"), lower_limit.strftime("%B"), year)
         
-        items = NewsItem.all()
+        items = Page.all()
         items.filter('publish_date >', lower_limit)
         items.filter('publish_date <', upper_limit)        
         items.order('-publish_date')
@@ -95,28 +107,18 @@ class DateList(BaseRequest):
             "items": items,
             "title": "News from %s" % title
         }
-        # calculate the template path
-        path = os.path.join(os.path.dirname(__file__), 'templates',
-            'list.html')
-        # render the template with the provided context
-        output = template.render(path, self._extra_context(context))
-        self.response.out.write(output)
+        self.render("list.html", context)
 
 class TagList(BaseRequest):
     def get(self, tag):
-        items = NewsItem.all()
+        items = Page.all()
         items.order('-publish_date')
         items.filter('tags = ', tag)
         context = {
             "items": items,
             "title": "Content tagged %s" % tag,
         }
-        # calculate the template path
-        path = os.path.join(os.path.dirname(__file__), 'templates',
-            'list.html')
-        # render the template with the provided context
-        output = template.render(path, self._extra_context(context))
-        self.response.out.write(output)
+        self.render("list.html", context)
 
 class Tags(BaseRequest):
     def get(self):
@@ -126,16 +128,16 @@ class Tags(BaseRequest):
             "tags": tags,
             "title": "Latest tags",
         }
-        # calculate the template path
-        path = os.path.join(os.path.dirname(__file__), 'templates',
-            'tags.html')
-        # render the template with the provided context
-        output = template.render(path, self._extra_context(context))
-        self.response.out.write(output)
+        self.render("tags.html", context)
         
 class Item(BaseRequest):
-    def get(self, year, month, day, slug):
-        item = NewsItem.gql("WHERE slug=:1", slug)[0]
+    def get(self, slug):
+        try:
+            item = Page.gql("WHERE internal_url=:1", slug)[0]
+        except IndexError:
+            self.error(404)
+            self.render("404.html", {"title": "Page not found"})
+            return
         
         # get a list of related items based on taggings
         # remember to filter out the article we're on
@@ -157,12 +159,7 @@ class Item(BaseRequest):
             "related": deduped,
             "title": item.title,
         }
-        # calculate the template path
-        path = os.path.join(os.path.dirname(__file__), 'templates',
-            'item.html')
-        # render the template with the provided context
-        output = template.render(path, self._extra_context(context))
-        self.response.out.write(output)
+        self.render("item.html", context)
    
 class Search(BaseRequest):
     def get(self):
@@ -173,7 +170,7 @@ class Search(BaseRequest):
             items = []
             title = ""
         else:
-            items = NewsItem.all().search(query).order("-publish_date")
+            items = Page.all().search(query).order("-publish_date")
             title = " for %s" % query
                         
         context = {
@@ -181,24 +178,24 @@ class Search(BaseRequest):
             "query": self.request.get("q"),
             "title": "Search%s" % title
         }
-        # calculate the template path
-        path = os.path.join(os.path.dirname(__file__), 'templates',
-            'search.html')
-        # render the template with the provided context
-        output = template.render(path, self._extra_context(context))
-        self.response.out.write(output)
+        self.render("search.html", context)
+                     
+class NotFoundPageHandler(BaseRequest):
+    def get(self):
+        self.error(404)
+        self.render("404.html", {"title": "Page not found"})
                         
 # wire up the views
 application = webapp.WSGIApplication([
     ('/', Index),
-    ('/([0-9]{4})/([0-9]{2})/([0-9]{2})/([A-Za-z0-9-]+)/?$', Item),
     ('/([0-9]{4})/([0-9]{2})/([0-9]{2})/?$', DateList),
     ('/([0-9]{4})/([0-9]{2})/?$', DateList),
     ('/([0-9]{4})/?$', DateList),
     ('/tags/?$', Tags),
     ('/tags/([A-Za-z0-9-]+)/?$', TagList),
     ('/search/?$', Search),
-
+    ('([A-Za-z0-9-/]+)', Item),
+    ('/.*', NotFoundPageHandler),
 ], debug=True)
 
 def main():

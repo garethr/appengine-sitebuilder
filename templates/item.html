@@ -3,13 +3,15 @@
 {% block header %}
 <h1>{{item.title}}</h1>
 <a href="{{item.publish_date|date:"/Y/m/d/"}}">{{item.publish_date|date:"jS F Y"}}</a>
+{% if item.external_url %}
+    <p>From <a href="{{item.external_url}}">{{item.external_url}}</a></p>
+{% endif %}
 {% endblock %}
-
 
 {% block content %}
 
-<h2>Related Content</h2>
 {% if related %}
+    <h2>Related Content</h2>
     <ul>
     {% for item in related %}
         <li><a href="{{item.url}}">{{item.title}}</a></li>
@@ -17,8 +19,9 @@
     </ul>
 {% endif %}
 
-<h2>Tags</h2>
+
 {% if item.tags %}
+<h2>Tags</h2>
 <ul>
 {% for tag in item.tags %}
     <li><a href="/tags/{{tag}}">{{tag}}</a></li>
