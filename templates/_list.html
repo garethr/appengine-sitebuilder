@@ -1,7 +1,17 @@
 {% if items %}
     <ol>
     {% for item in items %}
-        <li><a href="{{item.internal_url}}">{{item.title}}</a></li>
+        {% if forloop.first %}
+        <li>
+            <h3><a href="{{item.internal_url}}">{{item.title}}</a></h3>
+            {{item.content|truncatewords_html:100}}
+        </li>
+        {% else %}
+        <li{% if forloop.counter|divisibleby:2 %} class="alt"{% endif %}>            
+            <h3><a href="{{item.internal_url}}">{{item.title}}</a></h3>
+            {{item.content|truncatewords_html:15}}
+        </li>
+        {% endif %}
     {% endfor %}
     </ol>
 {% endif %}

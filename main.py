@@ -3,12 +3,15 @@
 import os
 from datetime import timedelta, date
 from calendar import isleap, monthrange
+import logging
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
 
 from models import Page, Tag, Content
+import settings
+from middleware import SimpleMiddleware
 
 class BaseRequest(webapp.RequestHandler):
     def _extra_context(self, context):        
@@ -18,7 +21,7 @@ class BaseRequest(webapp.RequestHandler):
             "this_month": date.today(),
             "last_month": date.today() - timedelta(monthrange(date.today().year, date.today().month)[1]),
         }
-        path = self.__dict__['request'].path        
+        path = self.request.path        
         content = Content.all().filter('path =', path)
         content_extras = {}
         for item in content:
@@ -78,6 +81,13 @@ class Index(BaseRequest):
 class DateList(BaseRequest):
     def get(self, year, month=None, day=None):
         
+        # we want a canonical url with the trailing slash
+        # so if it's missing we need to throw a 301, adding the slash in 
+        # the process
+        if self.request.path[-1] != "/":
+            self.redirect("%s/" % self.request.path, True)
+            return
+        
         if not month:
             # we're dealing with a year only
             # check how many days in this year
@@ -112,6 +122,14 @@ class DateList(BaseRequest):
 
 class TagList(BaseRequest):
     def get(self, tag):
+        
+        # we want a canonical url with the trailing slash
+        # so if it's missing we need to throw a 301, adding the slash in 
+        # the process
+        if self.request.path[-1] != "/":
+            self.redirect("%s/" % self.request.path, True)
+            return
+        
         items = Page.all()
         items.order('-publish_date')
         items.filter('tags = ', tag.replace("-", " "))
@@ -123,6 +141,14 @@ class TagList(BaseRequest):
 
 class Tags(BaseRequest):
     def get(self):
+        
+        # we want a canonical url with the trailing slash
+        # so if it's missing we need to throw a 301, adding the slash in 
+        # the process
+        if self.request.path[-1] != "/":
+            self.redirect("%s/" % self.request.path, True)
+            return
+        
         tags = Tag.all()
         tags.order('-date')
         context = {
@@ -133,6 +159,14 @@ class Tags(BaseRequest):
         
 class Item(BaseRequest):
     def get(self, slug):
+
+        # we want a canonical url with the trailing slash
+        # so if it's missing we need to throw a 301, adding the slash in 
+        # the process
+        if slug[-1] != "/":
+            self.redirect("%s/" % slug, True)
+            return
+
         try:
             item = Page.gql("WHERE internal_url=:1", slug)[0]
         except IndexError:
@@ -185,22 +219,28 @@ class NotFoundPageHandler(BaseRequest):
     def get(self):
         self.error(404)
         self.render("404.html", {"title": "Page not found"})
-                        
-# wire up the views
-application = webapp.WSGIApplication([
-    ('/', Index),
-    ('/([0-9]{4})/([0-9]{2})/([0-9]{2})/?$', DateList),
-    ('/([0-9]{4})/([0-9]{2})/?$', DateList),
-    ('/([0-9]{4})/?$', DateList),
-    ('/tags/?$', Tags),
-    ('/tags/([A-Za-z0-9-]+)/?$', TagList),
-    ('/search/?$', Search),
-    ('([A-Za-z0-9-/]+)', Item),
-    ('/.*', NotFoundPageHandler),
-], debug=True)
 
+# Log a message each time this module get loaded.
+logging.info('Loading %s, app version = %s',
+             __name__, os.getenv('CURRENT_VERSION_ID'))
+                        
 def main():
     "Run the application"
+    # wire up the views
+    ROUTES = [
+        ('/', Index),
+        ('/([0-9]{4})/([0-9]{2})/([0-9]{2})/?$', DateList),
+        ('/([0-9]{4})/([0-9]{2})/?$', DateList),
+        ('/([0-9]{4})/?$', DateList),
+        ('/tags/?$', Tags),
+        ('/tags/([A-Za-z0-9-]+)/?$', TagList),
+        ('/search/?$', Search),
+        ('([A-Za-z0-9-/]+)', Item),
+        ('/.*', NotFoundPageHandler),
+    ]
+    application = webapp.WSGIApplication(ROUTES, debug=settings.DEBUG)
+    # add simple middleware
+    application = SimpleMiddleware(application)
     run_wsgi_app(application)
 
 if __name__ == '__main__':

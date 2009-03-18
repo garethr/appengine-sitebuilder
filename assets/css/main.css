@@ -1,0 +1,4 @@
+/* remove teh feedburner styled links from the site content */
+.feedflare {
+    display: none;
+}
