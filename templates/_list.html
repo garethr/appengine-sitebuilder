@@ -1,15 +1,10 @@
 {% if items %}
-    <ol>
+    <ol class="items">
     {% for item in items %}
-        {% if forloop.first %}
-        <li>
-            <h3><a href="{{item.internal_url}}">{{item.title}}</a></h3>
-            {{item.content|truncatewords_html:100}}
-        </li>
-        {% else %}
+        {% if item.external_url %}
         <li{% if forloop.counter|divisibleby:2 %} class="alt"{% endif %}>            
-            <h3><a href="{{item.internal_url}}">{{item.title}}</a></h3>
-            {{item.content|truncatewords_html:15}}
+            <h3><a href="{{item.internal_url}}">{{item.title}}</a> <span>({{item.external_url|get_domain}})</span></h3>
+            <p><a href="{{item.publish_date|date:"/Y/m/d/"}}">{{item.publish_date|date:"jS F Y"}}</a></p>
         </li>
         {% endif %}
     {% endfor %}

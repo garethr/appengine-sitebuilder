@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 
+{% block header %}
+    <h1><strong>Topics</strong> added recently</h1>
+{% endblock %}
+
 {% block content %}
 
 {% if tags %}
-    <ul>
+    <ol class="items">
     {% for tag in tags %}
-        <li><a href="/tags/{{tag.name|slugify}}/">{{tag.name}}</a> added to <a href="{{tag.url}}">{{tag.title}}</a> {{tag.date|timesince}} ago</li>
+        <li>topic <a href="/topics/{{tag.name|slugify}}/">{{tag.name}}</a> added to <a href="{{tag.url}}">{{tag.title}}</a> {{tag.date|timesince}} ago</li>
     {% endfor %}
-    </ul>
+    </ol>
 {% endif %}
 
 {% endblock %}

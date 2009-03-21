@@ -1,12 +1,29 @@
 {% extends "base.html" %}
 
+{% block header %}
+    <h1><strong>Find</strong> previous content</h1>
+{% endblock %}
+
 {% block content %}
 
-    {% if query %}
-        <p>We found {{items.count}} result{{items.count|pluralize}}.</p>
-    {% else %}
-        <p>You need to enter a search query.</p>
-    {% endif %}
+    <div id="section">
+        <div id="search">
+            <form action="/search" method="get">
+                <div>
+                    <label for="q">Search</label>
+                    <input type="text" class="txt" name="q" id="q" value="{{query}}"/>
+                    <input type="submit" value="Search"/>
+                </div>
+            </form>
+        </div>
 
-    {% include "_list.html" %}
+        {% if query %}
+            <p class="msg">We found {{items.count}} result{{items.count|pluralize}}.</p>
+        {% else %}
+            <p class="msg">You need to enter a search query.</p>
+        {% endif %}
+
+        {% include "_list.html" %}
+        
+    </div>
 {% endblock %}

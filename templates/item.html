@@ -2,33 +2,41 @@
 
 {% block header %}
 <h1>{{item.title}}</h1>
-<a href="{{item.publish_date|date:"/Y/m/d/"}}">{{item.publish_date|date:"jS F Y"}}</a>
 {% if item.external_url %}
-    <p>From <a href="{{item.external_url}}">{{item.external_url}}</a></p>
+    <p><a href="{{item.publish_date|date:"/Y/m/d/"}}">{{item.publish_date|date:"jS F Y"}}</a>
+     | <a href="{{item.external_url}}">{{item.external_url|get_domain}}</a></p>
 {% endif %}
 {% endblock %}
 
 {% block content %}
 
+<div id="col">
 {% if related %}
+<div id="related">
     <h2>Related Content</h2>
-    <ul>
+    <ol class="items">
     {% for item in related %}
         <li><a href="{{item.url}}">{{item.title}}</a></li>
     {% endfor %}
-    </ul>
+    </ol>
+</div>
 {% endif %}
 
 
 {% if item.tags %}
-<h2>Tags</h2>
-<ul>
-{% for tag in item.tags %}
-    <li><a href="/tags/{{tag|slugify}}">{{tag}}</a></li>
-{% endfor %}
-</ul>
+<div id="tags">
+    <h2>Topics</h2>
+    <ul>
+    {% for tag in item.tags %}
+        <li><a href="/topics/{{tag|slugify}}">{{tag}}</a></li>
+    {% endfor %}
+    </ul>
+</div>
 {% endif %}
+</div>
 
+<div id="section">
 {{item.content}}
+</div>
 
 {% endblock %}

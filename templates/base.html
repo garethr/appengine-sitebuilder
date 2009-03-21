@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <title>{% block title %}{{title}}{% endblock %}</title>
-
+<head xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">
+    <title>{% block title %}{{title|striptags}}{% endblock %}</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="{{keywords}}"/>
     <meta name="description" content="{{description}}"/>
 
@@ -13,49 +12,90 @@
 </head>
 
 <body>
-    
-<div id="navigation">
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/tags/">Tags</a></li>
-    </ul>
-</div>
-    
-<div id="search">
-    <form action="/search" method="get">
-        <div>
-            <label for="q">Search</label>
-            <input type="text" name="q" id="q" value="{{query}}"/>
-            <input type="submit" value="Search"/>
+
+<div id="head">   
+    <div class="inner"> 
+        <h2><span>Hacker Posts</span></h2>
+        <div id="navigation" class="clearfix">
+            <ul>
+                <li><a href="/"><span>latest content</span> home</a></li>
+                <li><a href="/about/"><span>why this site</span> about</a></li>
+                <li><a href="/topics/"><span>categories</span> topics</a></li>
+                <li class="last"><a href="/search/"><span>find content</span> search</a></li>
+            </ul>
         </div>
-    </form>
+    </div>
 </div>
     
-<div id="header">
-{% block header %}
-{% endblock %}
-</div>
+<div id="main">
+    <div class="inner">
+    
+    <div id="header">
+    {% block header %}
+    {% endblock %}
+    </div>
 
-{% if lead %}
-<div id="lead">
-{{lead}}
-</div>
-{% endif %}
+    {% if lead %}
+    <div id="lead">
+    {{lead}}
+    </div>
+    {% endif %}
 
-<div id="content">
-{% block content %}
-{% endblock %}
+    <div id="content" class="clearfix">
+    {% block content %}
+    {% endblock %}
+    <div id="extra">
+        {% block extra %}
+        <div class="ad">
+            
+        </div>
+        {% endblock %}
+    </div>
+    </div>    
+    
+    </div>
 </div>
 
 <div id="footer">
-    <ul>
-        <li><a href="{{today|date:"/Y/m/d/"}}">Today</a></li>
-        <li><a href="{{yesterday|date:"/Y/m/d/"}}">Yesterday</a></li>
-        <li><a href="{{this_month|date:"/Y/m/"}}">This month</a></li>
-        <li><a href="{{last_month|date:"/Y/m/"}}">Last month</a></li>
-    </ul>
+    <div class="inner">
+        <div class="panel">
+            <h2>Previously</h2>
+            <ul>
+                <li><a href="{{today|date:"/Y/m/d/"}}">Today</a></li>
+                <li><a href="{{yesterday|date:"/Y/m/d/"}}">Yesterday</a></li>
+                <li><a href="{{this_month|date:"/Y/m/"}}">This month</a></li>
+                <li><a href="{{last_month|date:"/Y/m/"}}">Last month</a></li>
+            </ul>
+        </div>
+        <div class="panel">
+            <h2>About</h2>
+            <p>Content aggregation around a topic, community or event.</p>
+        </div>
+        <div class="panel">
+            <h2>Built With</h2>
+            <ul>
+                <li><a href="http://appengine.google.com/">Google App Engine</a></li>
+            </ul>
+        </div>
+        <div class="panel">
+            <h2>Built By</h2>
+            <ul>
+                <li>Gareth Rushgrove</li>
+                <li><a href="http://morethanseven.net">morethanseven.net</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-435455-9");
+pageTracker._trackPageview();
+} catch(err) {}</script>
 </body>
 
 </html>

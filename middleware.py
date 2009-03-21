@@ -1,5 +1,3 @@
-import re
-
 from webob import Request
 
 from lib import add_to_end
@@ -19,7 +17,7 @@ class SimpleMiddleware(object):
         if resp.content_type != 'text/html' or resp.status_int != 200:
             return resp(environ, start_response)
         # add a string to the end of the body
-        body = self.add_to_end(resp.body, "")
+        body = add_to_end(resp.body, "")
         # set the body to the new copy
         resp.body = body
         return resp(environ, start_response)

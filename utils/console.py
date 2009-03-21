@@ -20,10 +20,10 @@ def auth_func():
     return raw_input('Username:'), getpass.getpass('Password:')
 
 if len(sys.argv) < 2:
-    print "Usage: %s [host]" (sys.argv[0]
+    print "Usage: %s [host]" (sys.argv[0])
     exit(1)
 
-app_id = "sitebuilder"
+app_id = "hackerposts"
 
 if len(sys.argv) == 2:
     host = sys.argv[1]

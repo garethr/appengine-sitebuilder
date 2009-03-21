@@ -37,7 +37,7 @@ def auth_func():
     return raw_input('Username:'), getpass.getpass('Password:')
 
 
-app_id = "sitebuilder"
+app_id = "hackerposts"
 host = sys.argv[1]
 
 # we need to configure the datastore before we import the models
@@ -71,26 +71,29 @@ for feed in feeds:
         if Page.all().filter('external_url =', link).count() == 0:
             print "  creating %s" % entry.title
 
-            # use the Yahoo term extraction API to get tags for the content
-            srch = TermExtraction(app_id=settings.TERM_EXTRACTION_APP_ID)
-            srch.context = content
+            try:
+                # use the Yahoo term extraction API to get tags for the content
+                srch = TermExtraction(app_id=settings.TERM_EXTRACTION_APP_ID)
+                srch.context = content
 
-            tags = []
-            for tag in srch.parse_results():
-                tags.append(tag)
+                tags = []
+                for tag in srch.parse_results():
+                    tags.append(tag)
 
-            # create out new Page object
-            item = Page(
-                title=title,
-                content=content,
-                external_url=link,
-                tags=tags,
-            )
-            item.put()
-            # increment counter
-            counter += 1
+                # create out new Page object
+                item = Page(
+                    title=title,
+                    content=content,
+                    external_url=link,
+                    tags=tags,
+                )
+                item.put()
+                # increment counter
+                counter += 1
+            except:
+                print "   problem importing %s" % entry.title
         else:
             print "  duplicate %s" % entry.title
             
 run_time = time.time() - start_time
-print 'Imorted %s items from %d feeds in %f seconds' % (counter, len(feeds), run_time)
+print 'imported %s items from %d feeds in %f seconds' % (counter, len(feeds), run_time)

@@ -38,14 +38,14 @@ indexes:
   - name: publish_date
     direction: desc
 
-# Unused in query history -- copied from input.
+# Used 7 times in query history.
 - kind: Page
   properties:
   - name: tags
   - name: publish_date
     direction: desc
 
-# Used 184 times in query history.
+# Used 608 times in query history.
 - kind: Tag
   properties:
   - name: name

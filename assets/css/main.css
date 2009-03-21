@@ -1,4 +1,243 @@
-/* remove teh feedburner styled links from the site content */
+/* =Core */
+
+html, body {
+    background: #E6E2D6;
+}
+a {
+    color: #111;
+    text-decoration: none;
+    border-bottom: 1px solid #CCC;
+}
+a:hover {
+    border-bottom: 0;
+    text-decoration: underline;
+}
+
+/* =Layout */
+
+.inner {
+    margin: 0 auto;
+    width: 936px;
+    position: relative;
+}
+#head {
+    border-top: 20px solid #111;
+    background: #000;
+    padding: 5px 0;
+    border-bottom: 20px solid #E6E2D6;
+}
+#main {
+    background-color: #fff;
+    position: relative;
+}
+#content {
+    background: #FFF;   
+    padding: 20px 0;
+}
+#footer {
+    background: #E6E2D6;
+    padding: 20px 0;
+    color: #2A2624;
+    clear: both;
+}
+#header {
+    background: #FFF;
+    border-bottom: 1px solid #ECE9E6;
+    font-size: 140%;
+    color: #777;
+}
+#header p {
+    position: relative;
+    top: -10px;
+    left: 20px;
+    font-size: 65%;
+}
+#header strong {
+    color: #000;
+    font-weight: bold;
+}
+#section {
+    margin: 0 20px;
+    width: 560px;
+}
+
+/* =Logo */
+
+#head h2 {
+    background: #F06000;
+    color: #FFF;
+    border: 4px solid #F06000;
+    width: 150px;
+    font-size: 20px;
+    position: absolute;
+    left: 0;
+    top: -14px;
+}
+#head h2 span {
+    border: 4px solid #FFF;
+    display: block;
+    padding: 10px;
+}
+
+/* =Search */
+
+#search {
+    margin-bottom: 15px;
+}
+#search label {
+    position: absolute;
+    left: -9999em;
+}
+#search input.txt {
+    border: 1px solid #CCC;
+    border-top: 1px solid #999;
+    width: 200px;
+}
+.msg {
+    margin-bottom: 15px;
+}
+
+/* =Navigation */
+
+#navigation ul {
+    float: left;
+    margin-left: 180px;
+}
+#navigation ul li {
+    float: left;
+    margin: 10px 30px 10px 10px;
+}
+#navigation ul li a {
+    color: #BBAA99;
+    font-weight: bold;
+    font-size: 115%;
+    border: 0;
+}
+#navigation ul li a span {
+    display: block;
+    color: #997753;
+    font-weight: normal;
+    font-size: 80%;
+}
+#navigation ul li a:hover {
+    color: #FFF;
+    text-decoration: none;
+}
+#navigation ul li a:hover span {
+    color: #C2AA88;
+}
+
+/* =Details */
+
+ol.items li span {
+    color: #888;
+    font-size: 90%;
+}
+ol.items li p a {
+    color: #888;
+    font-size: 85%;
+    border: 0;
+}
+ol.items {
+    padding: 0 10px;
+    margin-left: 30px;
+}
+ol.items li {
+    margin-bottom: 10px;
+    list-style-type: decimal;
+    color: #999;
+}
+#footer .panel {
+    float: left;
+    width: 165px;
+    padding: 0 0 20px 10px; 
+    margin-right: 10px;
+    border-top: 1px solid #DAD0C7;
+}
+#footer .panel h2 {
+    font-weight: bold;
+    margin: 5px 0;
+    color: #BBAA99;
+}
+#footer p, #footer li {
+    color: #666;
+    font-size: 85%;
+}
+#footer a {
+    color: #2A2624;   
+}
+#footer a:hover {
+    text-decoration: underline;
+}
+#footer .panel li {
+    margin-bottom: 3px;
+}
+#header h1 {
+    padding: 20px;
+}
+#col {
+    float: right;
+    width: 336px;
+}
+#col h2 {
+    padding: 0 5px 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ECE9E6;
+    font-weight: bold;
+    color: #BBAA99;
+}
+#col a:hover {
+    text-decoration: underline;
+}
+#col ul {
+    padding: 5px;
+    line-height: 1.6;
+}
+#col ol {
+    padding: 5px 5px 0;
+
+}
+#tags ul li {
+    display: inline;
+    
+}
+#related {
+    margin-bottom: 20px;
+}
+#section p {
+    margin-bottom: 1.2em;
+    line-height: 1.6;
+}
+#section p strong {
+    font-weight: bold;
+}
+#section ul {
+    margin: 0 0 15px 15px;
+}
+#section a {
+
+}
+#section ul li {
+    list-style-type: square;
+    line-height: 1.6;
+    margin-bottom: 5px;
+}
+#section a:hover {
+    text-decoration: underline;
+    border-bottom: 0;
+}
+
+/* =Misc */
+
+/* remove the feedburner styled links from the site content */
 .feedflare {
     display: none;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
